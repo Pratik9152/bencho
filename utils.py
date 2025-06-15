@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.vectorstores import FAISS
 
-# Load your OpenRouter API key
+# Load API Key
 openai_key = os.getenv("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")
 VECTORSTORE_PATH = "vectorstore"
 
@@ -22,16 +22,17 @@ def load_vectorstore():
         api_key=openai_key,
         base_url="https://openrouter.ai/api/v1"
     )
+
     vectorstore = FAISS.from_documents(docs, embeddings)
     return vectorstore
 
-# Load vectorstore and model
+# Setup model and chain
 retriever = load_vectorstore().as_retriever()
 
 llm = ChatOpenAI(
     api_key=openai_key,
     base_url="https://openrouter.ai/api/v1",
-    model="mistralai/mixtral-8x7b",  # or any model from openrouter.ai
+    model="mistralai/mixtral-8x7b",
     temperature=0.3
 )
 
@@ -55,6 +56,7 @@ def get_answer(query):
         answer += refs
 
     return answer
+
 
         refs = "\n\n📎 **References:**\n"
         for i, doc in enumerate(sources[:3], start=1):
