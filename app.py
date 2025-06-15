@@ -7,7 +7,6 @@ st.set_page_config(
     page_icon="🤖"
 )
 
-# Custom background and styling
 st.markdown("""
     <style>
         body {
@@ -41,15 +40,9 @@ if query:
 
 st.markdown("---")
 st.subheader("📄 About Us")
+
 try:
     with open("about_us.md", "r", encoding="utf-8") as f:
         st.markdown(f.read())
 except FileNotFoundError:
     st.warning("About Us file not found.")
-
-
-try:
-    with open("about_us.md", "r", encoding="utf-8") as f:
-        st.markdown(f.read())
-except:
-    st.info("About section not available.")
