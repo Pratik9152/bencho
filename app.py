@@ -1,5 +1,4 @@
 import streamlit as st
-from utils import get_answer
 
 st.set_page_config(
     page_title="IRCLASS Payroll Chatbot",
@@ -34,9 +33,9 @@ query = st.text_input("💬 Enter your payroll question:")
 
 if query:
     with st.spinner("🔍 Fetching answer..."):
-        answer = get_answer(query)
+        # Dummy fallback if utils is broken
         st.markdown("### 📌 Answer:")
-        st.markdown(answer, unsafe_allow_html=True)
+        st.markdown("This is a placeholder response. Chatbot is under setup.")
 
 st.markdown("---")
 st.subheader("📄 About Us")
