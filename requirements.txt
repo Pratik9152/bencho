@@ -1,7 +1,10 @@
 streamlit
 langchain
-langchain_community
 openai
-pytesseract
-Pillow
+faiss-cpu
+tiktoken
+pypdf
+langchain-community
+langchain-core
+
 
