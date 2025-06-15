@@ -1,0 +1,1 @@
+Place your company policy PDFs here. These will be used by the chatbot to answer payroll questions.
