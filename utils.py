@@ -1,10 +1,10 @@
 import os
 from langchain.chains import RetrievalQA
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain.document_loaders import PyPDFLoader
 from langchain.vectorstores import FAISS
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.chat_models import ChatOpenAI
 
-# Load API Key
 openai_key = os.getenv("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")
 VECTORSTORE_PATH = "vectorstore"
 
@@ -12,29 +12,16 @@ def load_vectorstore():
     pdf_files = [f for f in os.listdir(VECTORSTORE_PATH) if f.endswith(".pdf")]
     if not pdf_files:
         raise FileNotFoundError("No policy PDF found in vectorstore.")
-
     docs = []
     for pdf in pdf_files:
         loader = PyPDFLoader(os.path.join(VECTORSTORE_PATH, pdf))
         docs.extend(loader.load())
-
-    embeddings = OpenAIEmbeddings(
-        api_key=openai_key,
-        base_url="https://openrouter.ai/api/v1"
-    )
-
+    embeddings = OpenAIEmbeddings(api_key=openai_key)
     vectorstore = FAISS.from_documents(docs, embeddings)
     return vectorstore
 
-# Setup model and chain
 retriever = load_vectorstore().as_retriever()
-
-llm = ChatOpenAI(
-    api_key=openai_key,
-    base_url="https://openrouter.ai/api/v1",
-    model="mistralai/mixtral-8x7b",
-    temperature=0.3
-)
+llm = ChatOpenAI(api_key=openai_key, temperature=0.3)
 
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
@@ -43,23 +30,13 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 def get_answer(query):
-    result = qa_chain(query)
+    result = qa_chain.invoke(query)
     answer = result['result']
     sources = result.get('source_documents', [])
-
     if sources:
-        refs = "\n\n📌 **References:**\n"
-        for i, doc in enumerate(sources[:3], start=1):
-            page = doc.metadata.get('page', '?')
-            source = doc.metadata.get('source', '?')
-            refs += f"{i}. Page {page}, File: {source}\n"
-        answer += refs
-
-    return answer
-
-
         refs = "\n\n📎 **References:**\n"
         for i, doc in enumerate(sources[:3], start=1):
             refs += f"{i}. Page {doc.metadata.get('page', '?')}, File: {doc.metadata.get('source', '?')}\n"
         answer += refs
     return answer
+
