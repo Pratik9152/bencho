@@ -34,11 +34,13 @@ if query:
 
 st.markdown("---")
 st.subheader("📄 About Us")
+
 try:
     with open("about_us.md", "r", encoding="utf-8") as f:
         st.markdown(f.read())
 except:
     st.info("About section not available.")
+
 
         st.markdown(f.read())
 except:
