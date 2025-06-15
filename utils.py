@@ -7,7 +7,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 
 VECTORSTORE_PATH = "vectorstore"
-openai_key = os.getenv("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")
+openai_key = os.getenv("sk-7qK3FzRApL9tXJH8GzqTnEyS5MlUv0zHjvQJ8f6kRy1JpO3B")
 
 # Load vectorstore from PDF files
 def load_vectorstore():
