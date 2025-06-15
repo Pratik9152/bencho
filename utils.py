@@ -2,10 +2,10 @@ import os
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import PyPDFLoader
 from langchain.vectorstores import FAISS
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.chat_models import ChatOpenAI
 
-openai_key = os.getenv("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")
+openai_key = os.getenv("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")  # OpenRouter key
 VECTORSTORE_PATH = "vectorstore"
 
 def load_vectorstore():
@@ -16,12 +16,17 @@ def load_vectorstore():
     for pdf in pdf_files:
         loader = PyPDFLoader(os.path.join(VECTORSTORE_PATH, pdf))
         docs.extend(loader.load())
-    embeddings = OpenAIEmbeddings(api_key=openai_key)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vectorstore = FAISS.from_documents(docs, embeddings)
     return vectorstore
 
 retriever = load_vectorstore().as_retriever()
-llm = ChatOpenAI(api_key=openai_key, temperature=0.3)
+llm = ChatOpenAI(
+    temperature=0.3,
+    api_key=openai_key,
+    base_url="https://openrouter.ai/api/v1",
+    model="mistralai/mixtral-8x7b",  # or any model from OpenRouter
+)
 
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
@@ -39,4 +44,5 @@ def get_answer(query):
             refs += f"{i}. Page {doc.metadata.get('page', '?')}, File: {doc.metadata.get('source', '?')}\n"
         answer += refs
     return answer
+
 
