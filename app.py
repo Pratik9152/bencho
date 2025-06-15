@@ -40,10 +40,3 @@ try:
         st.markdown(f.read())
 except:
     st.info("About section not available.")
-
-
-        st.markdown(f.read())
-except:
-    st.info("About section not available.")
-
-st.markdown("🔐 [Go to Admin Panel](https://your-app-name.streamlit.app/admin/panel) *(Login required)*")
