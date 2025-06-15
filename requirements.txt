@@ -1,13 +1,14 @@
 streamlit
 langchain
-langchain-community
 langchain-core
+langchain-community
 langchain-openai
 openai
 faiss-cpu
 pypdf
 tiktoken
-sentence-transformers
+sentence-transformers  # ✅ Required for HuggingFaceEmbeddings
+
 
 
 
