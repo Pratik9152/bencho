@@ -30,14 +30,16 @@ query = st.text_input("💬 Enter your payroll question:")
 if query:
     with st.spinner("🔍 Fetching answer..."):
         answer = get_answer(query)
-        st.markdown(f"### 📌 Answer:
-
-{answer}", unsafe_allow_html=True)
+        st.markdown(f"### 📌 Answer:\n\n{answer}", unsafe_allow_html=True)
 
 st.markdown("---")
 st.subheader("📄 About Us")
 try:
     with open("about_us.md", "r", encoding="utf-8") as f:
+        st.markdown(f.read())
+except:
+    st.info("About section not available.")
+
         st.markdown(f.read())
 except:
     st.info("About section not available.")
