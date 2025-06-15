@@ -1,8 +1,13 @@
 import streamlit as st
 from utils import get_answer
 
-st.set_page_config(page_title="IRCLASS Payroll Chatbot", layout="wide", page_icon="🤖")
+st.set_page_config(
+    page_title="IRCLASS Payroll Chatbot",
+    layout="wide",
+    page_icon="🤖"
+)
 
+# Custom background and styling
 st.markdown("""
     <style>
         body {
@@ -27,13 +32,21 @@ st.markdown("Ask payroll-related questions in English, Hindi, Tamil, Kannada, Be
 st.markdown("---")
 
 query = st.text_input("💬 Enter your payroll question:")
+
 if query:
     with st.spinner("🔍 Fetching answer..."):
         answer = get_answer(query)
-        st.markdown(f"### 📌 Answer:\n\n{answer}", unsafe_allow_html=True)
+        st.markdown("### 📌 Answer:")
+        st.markdown(answer, unsafe_allow_html=True)
 
 st.markdown("---")
 st.subheader("📄 About Us")
+try:
+    with open("about_us.md", "r", encoding="utf-8") as f:
+        st.markdown(f.read())
+except FileNotFoundError:
+    st.warning("About Us file not found.")
+
 
 try:
     with open("about_us.md", "r", encoding="utf-8") as f:
